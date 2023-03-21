@@ -5,7 +5,11 @@
     "titleBar.activeBackground": "#FFC600",
     "titleBar.inactiveBackground": "#FFC600CC"
   },
-  // These are all my auto-save configs
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "vue-html": "html",
+  },
+  "emmet.triggerExpansionOnTab": true,
   "editor.formatOnSave": true,
   // turn it off for JS and JSX, we will do this via eslint
   "[javascript]": {
@@ -16,8 +20,11 @@
   },
   // tell the ESLint plugin to run on save
   "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.tslint": true,
     "source.fixAll": true
   },
+  "eslint.alwaysShowStatus": true,
   // Optional BUT IMPORTANT: If you have the prettier extension enabled for other languages like CSS and HTML, turn it off for JS since we are doing it through Eslint already
   "prettier.disableLanguages": [
     "javascript",
