@@ -3,7 +3,6 @@ import React from 'react';
 import Img from 'gatsby-image';
 
 export default function SlicemasterPage({ data: { person } }) {
-  console.log(person);
   return (
     <div className="center">
       <Img fluid={person.image.asset.fluid} />
