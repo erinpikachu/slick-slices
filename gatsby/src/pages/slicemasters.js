@@ -1,15 +1,17 @@
-import { Link, graphql } from 'gatsby';
 import React from 'react';
+import { graphql, Link } from 'gatsby';
 import Img from 'gatsby-image';
 import styled from 'styled-components';
+import Pagination from '../components/Pagination';
+import SEO from '../components/SEO';
 
-const SliceMasterGrid = styled.div`
+const SlicemasterGrid = styled.div`
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `;
 
-const SliceMasterStyles = styled.div`
+const SlicemasterStyles = styled.div`
   a {
     text-decoration: none;
   }
@@ -36,13 +38,21 @@ const SliceMasterStyles = styled.div`
   }
 `;
 
-export default function SliceMasterPage({ data }) {
+export default function SlicemastersPage({ data, pageContext }) {
   const slicemasters = data.slicemasters.nodes;
   return (
     <>
-      <SliceMasterGrid>
+      <SEO title={`Slicemasters - Page ${pageContext.currentPage || 1}`} />
+      <Pagination
+        pageSize={parseInt(process.env.GATSBY_PAGE_SIZE)}
+        totalCount={data.slicemasters.totalCount}
+        currentPage={pageContext.currentPage || 1}
+        skip={pageContext.skip}
+        base="/slicemasters"
+      />
+      <SlicemasterGrid>
         {slicemasters.map((person) => (
-          <SliceMasterStyles key={person.id}>
+          <SlicemasterStyles key={person.id}>
             <Link to={`/slicemaster/${person.slug.current}`}>
               <h2>
                 <span className="mark">{person.name}</span>
@@ -50,18 +60,24 @@ export default function SliceMasterPage({ data }) {
             </Link>
             <Img fluid={person.image.asset.fluid} />
             <p className="description">{person.description}</p>
-          </SliceMasterStyles>
+          </SlicemasterStyles>
         ))}
-      </SliceMasterGrid>
+      </SlicemasterGrid>
     </>
   );
 }
 
 export const query = graphql`
-  query {
-    slicemasters: allSanityPerson {
+  query($skip: Int = 0, $pageSize: Int = 3) {
+    slicemasters: allSanityPerson(limit: $pageSize, skip: $skip) {
+      totalCount
       nodes {
+        name
         id
+        slug {
+          current
+        }
+        description
         image {
           asset {
             fluid(maxWidth: 410) {
@@ -69,13 +85,7 @@ export const query = graphql`
             }
           }
         }
-        name
-        description
-        slug {
-          current
-        }
       }
-      totalCount
     }
   }
 `;
